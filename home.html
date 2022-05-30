@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World University Ranking Prediction</title>
+    <link rel="shortcut icon" href="logo.ico" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: grey;
+        }
+        .navbar-brand {
+            display: block;
+            margin: auto;
+            font-weight: bold;
+            font-family: "Helvetica";
+        }
+        .submit-button {
+            display: block;
+            margin: auto;
+        }
+        .submit-button:hover {
+            background-color: #34b00e;
+            border-color: red;
+            border-size: 2.5px;
+        }
+        p, .copyright {
+            text-align: center;
+            color: yellow !important;
+            font-weight: bold !important;
+            font-size: 1.5rem !important;
+            font-family: "Helvetica",sans-serif !important;
+            text-decoration: none !important;
+        }
+        .copyright:hover {
+            filter: brightness(150%);
+            transform: scale(1) !important;
+            opacity: 0.7 !important;
+        }
+        p:hover {
+            filter: brightness(150%);
+        }
+        .last_row {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            background-color: #d5a6f7;
+        }
+        h1 {
+            color: indigo;
+            font-weight: bold;
+            font-family: 'Arial',sans-serif;
+        }
+        h5 {
+            color: maroon;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        th {
+            color: royalblue;
+            fontweight: bold;
+            fontsize: 18px;
+        }
+        .predict-dec {
+            color: violetred;
+            font-weight: bold;
+            font-size: 2.5rem;
+            font-family: 'Cooper Black',sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0"><h1>World University Ranking Prediction</h1></span>
+    </nav>
+    <table class="table table-success table-striped">
+        <tr>
+            <th>Feature</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>University</td>
+            <td>Name of the university</td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td>Name of the country in which the university is located</td>
+        </tr>
+        <tr>
+            <td>National Rank</td>
+            <td>Rank of university within its country</td>
+        </tr>
+        <tr>
+            <td>Total Score</td>
+            <td>Total score, used to determine overall rank</td>
+        </tr>
+        <tr>
+            <td>Alumni Score</td>
+            <td>Alumni Score, based on the number of alumni of an institution winning nobel prizes and fields medals</td>
+        </tr>
+        <tr>
+            <td>Award Score</td>
+            <td>Award Score, based on the number of staff of an institution winning Nobel Prizes in Physics, Chemistry, Medicine and other domains</td>
+        </tr>
+        <tr>
+            <td>HiCi Score</td>
+            <td>HiCi Score, based on the number of Highly Cited Researchers selected by Thomson Reuters</td>
+        </tr>
+        <tr>
+            <td>N&S Score</td>
+            <td>N&S Score, based on the number of papers published in Nature and Science</td>
+        </tr>
+        <tr>
+            <td>Publication Score</td>
+            <td>PUB Score, based on total number of papers indexed in the Science Citation Index-Expanded and Social Science Citation </td>
+        </tr>
+        <tr>
+            <td>PCP Score</td>
+            <td>PCP Score, the weighted scores of the above five indicators divided by the number of full time academic staff</td>
+        </tr>
+        <tr>
+            <td>Year</td>
+            <td>Year of ranking (2005 to 2015)</td>
+        </tr>
+    </table>
+    <div class="container">
+        <form action="/predict" method="post">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">University:</h5>
+                            <select name="university" id="university" required="required">
+                                {% for uni in university_names %} 
+                                        <option value="{{uni}}" SELECTED>{{uni}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Country:</h5>
+                            <select name="country" id="country" required="required">
+                                {% for cntry in country_names %} 
+                                        <option value="{{cntry}}" SELECTED>{{cntry}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">National Rank:</h5>
+                            <input type="number" min="1" max="155" name="country_rank" id="country_rank" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Score:</h5>
+                            <input type="number" step="0.1" min="23.5" max="100.0" name="total_score" id="total_score" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Alumni Score:</h5>
+                            <input type="number" step="0.1" min="0.0" max="100.0" name="alumni_score" id="alumni_score" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Award Score:</h5>
+                            <input type="number" step="0.1" min="0.0" max="100.0" name="award_score" id="award_score" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">HiCi Score:</h5>
+                            <input type="number" step="0.1" min="0.0" max="100.0" name="hici_score" id="hici_score" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">NS Score:</h5>
+                            <input type="number" step="0.1" min="0.0" max="100.0" name="ns_score" id="ns_score" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Publication Score:</h5>
+                            <input type="number" min="7.3" max="100.0" step="0.1" name="pub_score" id="pub_score" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">PCP Score:</h5>
+                            <input type="number" min="8.3" max="100.0" step="0.1" name="pcp_score" id="pcp_score" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row last_row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Year:</h5>
+                            <input type="number" min="2005" max="2015" name="year" id="year" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <!-- Submit -->
+            <input type="submit" value="Submit" class="btn btn-primary submit-button">
+        </form>
+        <br>
+        <h3 class="predict-dec">{{ prediction_text }}</h3> 
+        <br>
+        <p class="copyright">@2022 Sayam Kumar</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+</html>
