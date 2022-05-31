@@ -19,10 +19,17 @@ model
 # In[3]:
 
 
-app = Flask(__name__)
+scaler = joblib.load('scaler.bin')
+scaler
 
 
 # In[4]:
+
+
+app = Flask(__name__)
+
+
+# In[5]:
 
 
 nations = ['Australia', 'Austria', 'Belgium', 'Brazil', 'Canada', 'Chile',
@@ -437,15 +444,6 @@ uni_encoded = np.arange(0,658,1)
 universities = dict(zip(schools,uni_encoded))
 
 
-# In[5]:
-
-
-input_scale = [187.28734097,  13.62284985,  40.45890822,
-          6.42540997,  11.48077874,  10.93106613,  12.01539329,
-          9.58189772,  12.57305637,   6.78325873,   3.19724979]
-target_scale = 143.48797928
-
-
 # In[6]:
 
 
@@ -474,20 +472,7 @@ def predict():
         pub = float(request.form['pub_score'])  # 7.3 to 100.0
         pcp = float(request.form['pcp_score'])  # 8.3 to 100.0
         year = int(request.form['year'])  # 2005 to 2015  
-        university /= input_scale[0]
-        country /= input_scale[1]
-        national_rank /= input_scale[2]
-        score /= input_scale[3]
-        alumni /= input_scale[4]
-        award /= input_scale[5]
-        hici /= input_scale[6]
-        ns /= input_scale[7]
-        pub /= input_scale[8]
-        pcp /= input_scale[9]
-        year /= input_scale[10]
-        
-        predictions = model.predict([[
-            university,
+        scaled_input = scaler.transform([[university,
             country,
             national_rank,
             score,
@@ -497,10 +482,9 @@ def predict():
             ns,
             pub,
             pcp,
-            year
-        ]])
-        
-        output = round(abs(predictions[0] * target_scale))
+            year]])
+        predictions = model.predict(scaled_input)
+        output = round(abs(predictions[0])*143.488)
         return render_template('home.html',prediction_text="The world rank of the given university is {}.".format(output),country_names=countries,university_names=universities)
 
 
