@@ -1,7 +1,7 @@
 # World-University-Rating-Prediction
 Successfully established a machine learning model for predicting the global rating of a specific university based on a set of distinct features.
 
-![World University Ranking Prediction](https://www.zju.edu.cn/_upload/article/images/97/83/a484ccd543e399ab16e4188a8b73/a71e0021-bca1-4083-85b1-7005245986ed.png)
+![World University Ranking Prediction](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx7TzwuCIvRGbRq4L5eB2D2A-nU9JfU0sYdbGX0ZMk5i0buekFZZ3JGd9QEvA964IL1QQ&usqp=CAU)
 
 ## Deployed Web Application 
 
